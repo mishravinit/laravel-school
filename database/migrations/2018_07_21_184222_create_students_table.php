@@ -17,6 +17,7 @@ class CreateStudentsTable extends Migration
             $table->increments('id')->unique();
             $table->string('email')->unique();
             $table->string('name');
+            $table->string('password');
             $table->year('admission_day');
             $table->timestamps();
         });
