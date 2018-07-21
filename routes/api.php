@@ -17,4 +17,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/students/{id}', 'StudentController@show');
+//Route::get('/students/{id}', 'StudentController@show');
+Route::post('/login','StudentController@login');
+
+Route::group(['middleware'=>'jwt.auth'], function(){
+    Route::get('/students/{id}', 'StudentController@show');
+});
