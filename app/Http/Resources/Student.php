@@ -19,4 +19,11 @@ class Student extends JsonResource
             'test' => 'test'
         ];
     }
+
+//    public function with($request)
+//    {
+//        return [
+//            'hey' => 'you'
+//        ];
+//    }
 }

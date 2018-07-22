@@ -22,4 +22,9 @@ Route::post('/login','StudentController@login');
 
 Route::group(['middleware'=>'jwt.auth'], function(){
     Route::get('/students/{id}', 'StudentController@show');
+    Route::get('/students', 'StudentController@index');
+
+    Route::post('/students', 'StudentController@store');
+    Route::put('/students/{id}', 'StudentController@update');
+    Route::delete('/students/{id}', 'StudentController@delete');
 });
