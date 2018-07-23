@@ -10,6 +10,8 @@ use App\Http\Resources\Student as StudentResource;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
+use App\Exceptions;
+
 class StudentController extends Controller
 {
     public function __construct(Model $model)
@@ -19,9 +21,11 @@ class StudentController extends Controller
 
     public function index()
     {
-        return Model::find(1)
-            ->with('role')
-            ->get();
+        try {
+            return StudentService::getAll();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function store(Request $request)
@@ -44,8 +48,13 @@ class StudentController extends Controller
 
     public function show($id)
     {
-        return new StudentResource(Model::find($id));
+        try {
+            return StudentService::getById($id);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
+
 
     public function login(Request $request)
     {
@@ -69,5 +78,18 @@ class StudentService
     public static function getCredentials($request)
     {
         return $request->only('email', 'password');
+    }
+
+    public static function getById($id)
+    {
+        return Model::findOrFail($id)
+            ->with('role')
+            ->get();
+    }
+
+    public static function getAll()
+    {
+        return Model::with('role')
+            ->get();
     }
 }
