@@ -15,7 +15,7 @@ class Student extends Authenticatable
     protected $fillable = ['email','password','name','admission_day'];
     protected $hidden = ['password'];
 
-    public function roled(){
+    public function role(){
         return $this->belongsTo('App\Role');
     }
 }

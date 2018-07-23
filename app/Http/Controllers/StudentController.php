@@ -20,8 +20,7 @@ class StudentController extends Controller
     public function index()
     {
         return Model::find(1)
-            ->leftJoin('roles', 'students.role', '=', 'roles.id')
-            ->select('*')
+            ->with('role')
             ->get();
     }
 

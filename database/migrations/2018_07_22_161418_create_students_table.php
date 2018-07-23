@@ -19,11 +19,11 @@ class CreateStudentsTable extends Migration
             $table->string('name');
             $table->string('password');
             $table->year('admission_day');
-            $table->tinyInteger('role')->unique();
+            $table->tinyInteger('role_id');
             $table->timestamps();
 
 
-            $table->foreign('role')->references('id')->on('roles');
+            $table->foreign('role_id')->references('id')->on('roles');
         });
     }
 

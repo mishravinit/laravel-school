@@ -17,7 +17,7 @@ class StudentsTableSeeder extends Seeder
             'name' => 'huy',
             'password' => bcrypt('123'),
             'admission_day' => 2014,
-            'role' => 1
+            'role_id' => 1
         ]);
     }
 }
