@@ -162,6 +162,7 @@ return [
 
         // my new provider
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
 
     ],
 
@@ -212,8 +213,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        // my new alias
+        // my new alias'
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
 
     ],
 
