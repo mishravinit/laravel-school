@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-
 use App\Student as Model;
-use App\Http\Resources\Student as StudentResource;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
+use App\Http\Resources\Student as StudentResource;
 use App\Exceptions;
 
 class StudentController extends Controller
@@ -24,15 +22,25 @@ class StudentController extends Controller
         try {
             return StudentService::getAll();
         } catch (\Exception $e) {
-            return $e->getMessage();
+            return StudentService::getFailMessageByServer($e);
         }
     }
 
-    public function store(Request $request)
+    public function show($id)
     {
-        $model = Model::create($request->all());
-        return response()->json($model, 201);
+        try {
+            $model = StudentService::getById($id);
+        } catch (\Exception $e) {
+            return StudentService::getFailMessageByServer($e);
+        }
+        return $model;
     }
+
+//    public function store(Request $request)
+//    {
+//        $model = Model::create($request->all());
+//        return response()->json($model, 201);
+//    }
 
 //    public function update(Request $request, Model $model)
 //    {
@@ -46,15 +54,6 @@ class StudentController extends Controller
 //        return response()->json(null, 204);
 //    }
 
-    public function show($id)
-    {
-        try {
-            return StudentService::getById($id);
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
 
     public function login(Request $request)
     {
@@ -62,12 +61,12 @@ class StudentController extends Controller
         $token = null;
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['invalid_email_or_password'], 422);
+                return StudentService::getCustomFailMessageByClient('invalid_email_or_password');
             }
         } catch (JWTException $e) {
-            return response()->json(['Failed_to_create_token'], 500);
+            return StudentService::getCustomFailMessageByServer('fail_to_create_token');
         }
-        return response()->json(compact('token'));
+        return StudentService::getTokenSuccessMessage($token);
     }
 
 }
@@ -91,5 +90,39 @@ class StudentService
     {
         return Model::with('role')
             ->get();
+    }
+
+    public static function getFailMessageByServer($e)
+    {
+        return response()->json([
+            'error_code' => '0002',
+            'error_message' => 'general_error',
+            'error_message_extra' => $e->getMessage()
+        ]);
+    }
+
+    public static function getCustomFailMessageByServer($message)
+    {
+        return response()->json([
+            'error_code' => '0002',
+            'error_message' => $message
+        ]);
+    }
+
+    public static function getCustomFailMessageByClient($message)
+    {
+        return response()->json([
+            'error_code' => '0001',
+            'error_message' => $message
+        ]);
+    }
+
+    public static function getTokenSuccessMessage($message)
+    {
+        return response()->json([
+            'error_code' => '0000',
+            'error_message' => 'get_token_success',
+            'token' => $message
+        ]);
     }
 }
