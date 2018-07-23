@@ -19,7 +19,10 @@ class StudentController extends Controller
 
     public function index()
     {
-        return Model::all();
+        return Model::find(1)
+            ->leftJoin('roles', 'students.role', '=', 'roles.id')
+            ->select('*')
+            ->get();
     }
 
     public function store(Request $request)
@@ -66,6 +69,6 @@ class StudentService
 {
     public static function getCredentials($request)
     {
-        return $request->only('email','password');
+        return $request->only('email', 'password');
     }
 }

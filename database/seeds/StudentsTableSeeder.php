@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 class StudentsTableSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     *   Run the database seeds.
      *
      * @return void
      */
