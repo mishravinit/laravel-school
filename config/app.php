@@ -164,6 +164,9 @@ return [
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
 
+        //custom
+        App\Providers\MessageServiceProvider::class,
+
     ],
 
     /*
@@ -216,6 +219,7 @@ return [
         // my new alias'
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+
 
     ],
 

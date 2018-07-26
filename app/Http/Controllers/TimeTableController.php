@@ -6,15 +6,21 @@ use Illuminate\Http\Request;
 use App\TimeTable as Model;
 use App\Exceptions;
 
+use App\Services\MessageService;
 
 class TimeTableController extends Controller
 {
+    public function __construct(MessageService $messageService)
+    {
+        $this->messageService = $messageService;
+    }
+
     public function index($id)
     {
         try {
             $model = TimeTableService::getById($id);
         } catch (\Exception $e) {
-            return TimeTableService::getFailMessageByServer($e);
+            return $this->messageService->getFailMessageByServer($e);
         }
         return $model;
     }
@@ -32,37 +38,5 @@ class TimeTableService
             ->get();
     }
 
-    public static function getFailMessageByServer($e)
-    {
-        return response()->json([
-            'error_code' => '0002',
-            'error_message' => 'general_error',
-            'error_message_extra' => $e->getMessage()
-        ]);
-    }
 
-    public static function getCustomFailMessageByServer($message)
-    {
-        return response()->json([
-            'error_code' => '0002',
-            'error_message' => $message
-        ]);
-    }
-
-    public static function getCustomFailMessageByClient($message)
-    {
-        return response()->json([
-            'error_code' => '0001',
-            'error_message' => $message
-        ]);
-    }
-
-    public static function getTokenSuccessMessage($message)
-    {
-        return response()->json([
-            'error_code' => '0000',
-            'error_message' => 'get_token_success',
-            'token' => $message
-        ]);
-    }
 }

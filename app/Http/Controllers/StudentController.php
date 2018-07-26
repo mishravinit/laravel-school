@@ -6,15 +6,17 @@ use Illuminate\Http\Request;
 use App\Student as Model;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Services\MessageService;
 
 use App\Http\Resources\Student as StudentResource;
 use App\Exceptions;
 
+
 class StudentController extends Controller
 {
-    public function __construct(Model $model)
+    public function __construct(MessageService $messageService)
     {
-
+        $this->messageService = $messageService;
     }
 
     public function index()
@@ -22,7 +24,7 @@ class StudentController extends Controller
         try {
             return StudentService::getAll();
         } catch (\Exception $e) {
-            return StudentService::getFailMessageByServer($e);
+            return $this->messageService->getFailMessageByServer($e);
         }
     }
 
@@ -31,29 +33,10 @@ class StudentController extends Controller
         try {
             $model = StudentService::getById($id);
         } catch (\Exception $e) {
-            return StudentService::getFailMessageByServer($e);
+            return $this->messageService->getFailMessageByServer($e);
         }
         return $model;
     }
-
-//    public function store(Request $request)
-//    {
-//        $model = Model::create($request->all());
-//        return response()->json($model, 201);
-//    }
-
-//    public function update(Request $request, Model $model)
-//    {
-//        $model->update($request->all());
-//        return response()->json($model, 200);
-//    }
-
-//    public function delete(Article $article)
-//    {
-//        $article->delete();
-//        return response()->json(null, 204);
-//    }
-
 
     public function login(Request $request)
     {
@@ -61,10 +44,10 @@ class StudentController extends Controller
         $token = null;
         try {
             if (!$token = JWTAuth::attempt($credentials)) {
-                return StudentService::getCustomFailMessageByClient('invalid_email_or_password');
+                return $this->messageService->getCustomFailMessageByClient('invalid_email_or_password');
             }
         } catch (JWTException $e) {
-            return StudentService::getCustomFailMessageByServer('fail_to_create_token');
+            return $this->messageService->getCustomFailMessageByServer('fail_to_create_token');
         }
         return StudentService::getTokenSuccessMessage($token);
     }
@@ -90,31 +73,6 @@ class StudentService
     {
         return Model::with('role')
             ->get();
-    }
-
-    public static function getFailMessageByServer($e)
-    {
-        return response()->json([
-            'error_code' => '0002',
-            'error_message' => 'general_error',
-            'error_message_extra' => $e->getMessage()
-        ]);
-    }
-
-    public static function getCustomFailMessageByServer($message)
-    {
-        return response()->json([
-            'error_code' => '0002',
-            'error_message' => $message
-        ]);
-    }
-
-    public static function getCustomFailMessageByClient($message)
-    {
-        return response()->json([
-            'error_code' => '0001',
-            'error_message' => $message
-        ]);
     }
 
     public static function getTokenSuccessMessage($message)
