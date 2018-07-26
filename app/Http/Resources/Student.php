@@ -14,16 +14,11 @@ class Student extends JsonResource
      */
     public function toArray($request)
     {
+
         return [
-            'id' => $this->id,
+            'id' => $this->email,
             'test' => 'test'
         ];
     }
 
-//    public function with($request)
-//    {
-//        return [
-//            'hey' => 'you'
-//        ];
-//    }
 }
