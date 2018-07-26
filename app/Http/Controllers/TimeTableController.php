@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StudentCollection;
+use App\Services\StudentService;
 use Illuminate\Http\Request;
 use App\TimeTable as Model;
 use App\Exceptions;
@@ -32,10 +34,15 @@ class TimeTableService
 
     public static function getById($id)
     {
-        return Model::where('student_id', '=', $id)
+        $model = Model::where('student_id', '=', $id)
             ->firstOrFail()
             ->with('student')
             ->get();
+        return $model;
+        $student = StudentService::getById($id);
+//        return ;
+//        return $model;
+//        return new StudentCollection($model,$student);
     }
 
 

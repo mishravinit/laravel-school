@@ -10,8 +10,7 @@ namespace App\Services;
 
 class MessageService
 {
-
-    public function getFailMessageByServer($e)
+    public static function getFailMessageByServer($e)
     {
         return response()->json([
             'error_code' => '0002',
@@ -20,7 +19,7 @@ class MessageService
         ]);
     }
 
-    public function getCustomFailMessageByServer($message)
+    public static function getCustomFailMessageByServer($message)
     {
         return response()->json([
             'error_code' => '0002',
@@ -28,7 +27,7 @@ class MessageService
         ]);
     }
 
-    public function getCustomFailMessageByClient($message)
+    public static function getCustomFailMessageByClient($message)
     {
         return response()->json([
             'error_code' => '0001',
