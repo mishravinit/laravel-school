@@ -17,14 +17,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//Route::get('/students/{id}', 'StudentController@show');
 Route::post('/login','StudentController@login');
-
 Route::group(['middleware'=>'jwt.auth'], function(){
     Route::get('/students/{id}', 'StudentController@show');
     Route::get('/students', 'StudentController@index');
 
-    Route::post('/students', 'StudentController@store');
-    Route::put('/students/{id}', 'StudentController@update');
-    Route::delete('/students/{id}', 'StudentController@delete');
+    Route::get('/students/{id}/time_tables', 'TimeTableController@index');
+
+//    Route::post('/students', 'StudentController@store');
+//    Route::put('/students/{id}', 'StudentController@update');
+//    Route::delete('/students/{id}', 'StudentController@delete');
 });
